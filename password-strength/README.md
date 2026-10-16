@@ -91,3 +91,6 @@ password-strength/
 仓库采用 [MIT License](../LICENSE)。
 
 [返回项目索引](../README.md)
+
+
+https://x.com/sekenoov/status/2110702235525255606

@@ -5,3 +5,5 @@
 直接用浏览器打开 `index.html` 即可预览，无需安装依赖。
 
 第一张参考图的文字被裁切，这里补为 `My Collection`，可在 HTML 中修改。
+
+https://x.com/LynelDesign/status/2110283670917677400
