@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>4 Radio Button · 逐帧复刻</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="assets/motion.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <div class="composition" aria-label="四款 A/B 单选按钮动效">
+        <img class="chrome" src="assets/chrome.svg" alt="" draggable="false" />
+        <svg class="animation" viewBox="0 0 895 895" aria-hidden="true">
+          <g id="line-art"></g>
+          <g id="frame-art"></g>
+          <g id="jump-art"></g>
+          <g id="rise-art"></g>
+        </svg>
+        <fieldset class="radio-group line">
+          <legend>拉伸横线</legend>
+          <input id="line-a" type="radio" name="line" value="a" checked />
+          <label for="line-a" class="a"><span>A</span></label>
+          <input id="line-b" type="radio" name="line" value="b" />
+          <label for="line-b" class="b"><span>B</span></label>
+        </fieldset>
+        <fieldset class="radio-group frame">
+          <legend>收缩边框</legend>
+          <input id="frame-a" type="radio" name="frame" value="a" checked />
+          <label for="frame-a" class="a"><span>A</span></label>
+          <input id="frame-b" type="radio" name="frame" value="b" />
+          <label for="frame-b" class="b"><span>B</span></label>
+        </fieldset>
+        <fieldset class="radio-group jump">
+          <legend>跳跃方块</legend>
+          <input id="jump-a" type="radio" name="jump" value="a" checked />
+          <label for="jump-a" class="a"><span>A</span></label>
+          <input id="jump-b" type="radio" name="jump" value="b" />
+          <label for="jump-b" class="b"><span>B</span></label>
+        </fieldset>
+        <fieldset class="radio-group rise">
+          <legend>下沉凸起</legend>
+          <input id="rise-a" type="radio" name="rise" value="a" checked />
+          <label for="rise-a" class="a"><span>A</span></label>
+          <input id="rise-b" type="radio" name="rise" value="b" />
+          <label for="rise-b" class="b"><span>B</span></label>
+        </fieldset>
+      </div>
+    </main>
+  </body>
+</html>
