@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Password strength · 力量测试机</title>
+  <style>
+    :root {
+      font-family: Arial, Helvetica, sans-serif;
+      color: #1e1e1e;
+      background: #f1f3ef;
+      font-synthesis: none;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    main {
+      padding: 28px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .frame {
+      width: 380px;
+      height: 522px;
+      position: relative;
+    }
+
+    .card {
+      position: relative;
+      width: 380px;
+      height: 522px;
+      border: 1px solid #e4e5e2;
+      border-radius: 26px;
+      background: #fdfdfd;
+      box-shadow: 0 7px 23px #242a2510;
+      transform-origin: top left;
+      overflow: hidden;
+    }
+
+    .header {
+      position: absolute;
+      top: 28px;
+      left: 30px;
+      right: 30px;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 22px;
+      letter-spacing: -0.65px;
+      line-height: 27px;
+      margin: 0 0 3px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #90918f;
+      line-height: 18px;
+      margin: 0 0 10px;
+    }
+
+    .input-wrap {
+      height: 46px;
+      border: 1.5px solid #71a9db;
+      border-radius: 13px;
+      box-shadow: 0 0 0 4px #0080ff10;
+      position: relative;
+      transition:
+        border-color 0.18s,
+        box-shadow 0.18s;
+    }
+
+    .input-wrap:focus-within {
+      border-color: #428ed0;
+      box-shadow: 0 0 0 4px #0080ff12;
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      padding: 0 43px 0 16px;
+      color: #222;
+      font-size: 18px;
+      border-radius: 12px;
+    }
+
+    input::selection {
+      background: #b8dcff;
+    }
+
+    .eye {
+      position: absolute;
+      right: 9px;
+      top: 9px;
+      width: 28px;
+      height: 27px;
+      border: 0;
+      background: none;
+      color: #8b8d8d;
+      padding: 3px;
+    }
+
+    .eye svg {
+      width: 22px;
+      height: 20px;
+    }
+
+    .feedback {
+      height: 25px;
+      margin-top: 12px;
+      font-size: 15px;
+      color: #929391;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(-3px);
+      transition:
+        opacity 0.2s,
+        transform 0.2s;
+    }
+
+    .feedback.show {
+      opacity: 1;
+      transform: none;
+    }
+
+    .feedback b {
+      color: var(--result);
+      font-weight: 600;
+    }
+
+    .status-icon {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      background: var(--result);
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .card.result .input-wrap {
+      border-color: var(--result);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--result) 14%, transparent);
+    }
+
+    .machine {
+      position: absolute;
+      inset: 0;
+      width: 380px;
+      height: 522px;
+      overflow: visible;
+    }
+
+    .tick {
+      fill: #8f9190;
+      font-size: 14px;
+      text-anchor: end;
+      transition: fill 0.18s;
+    }
+
+    .segment {
+      fill: #efefee;
+      transition: fill 0.18s;
+    }
+
+    .lit {
+      fill: var(--result);
+    }
+
+    .tick.lit {
+      font-weight: 600;
+    }
+
+    .bell {
+      fill: #bfc1c0;
+      transform-origin: 150px 216px;
+    }
+
+    .bell.ringing {
+      fill: #2dc557;
+      animation: ring 0.62s ease-in-out;
+    }
+
+    .bell.green {
+      fill: #2dc557;
+    }
+
+    .waves {
+      stroke: #2dc557;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      opacity: 0;
+    }
+
+    .ringing~.waves {
+      animation: waves 0.7s ease-out;
+    }
+
+    .puck {
+      transform: translateY(0);
+      will-change: transform;
+    }
+
+    .trail {
+      opacity: 0;
+    }
+
+    .lever {
+      position: absolute;
+      left: 300px;
+      top: 398px;
+      width: 22px;
+      height: 118px;
+      transform-origin: 11px 116px;
+      z-index: 3;
+      will-change: transform;
+    }
+
+    .shaft {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      width: 8px;
+      height: 110px;
+      border-radius: 5px;
+      background: #9b9da0;
+    }
+
+    .pivot {
+      position: absolute;
+      bottom: -2px;
+      left: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #96999b;
+    }
+
+    .continue {
+      position: absolute;
+      left: 50%;
+      top: -3px;
+      transform: translateX(-50%);
+      height: 34px;
+      padding: 0 15px;
+      border: 0;
+      border-radius: 20px;
+      color: #fff;
+      background: #0783ff;
+      white-space: nowrap;
+      font-size: 15px;
+      box-shadow: 0 1px 1px #0064c50c;
+    }
+
+    .continue:focus-visible,
+    .eye:focus-visible {
+      outline: 2px solid #007dff;
+      outline-offset: 4px;
+    }
+
+    .continue:hover {
+      background: #0079f0;
+    }
+
+    .continue:disabled {
+      cursor: default;
+    }
+
+    .hint {
+      margin: 0;
+      color: #a1a49e;
+      font-size: 11px;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    a.hint {
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    a.hint:hover {
+      color: #62675e;
+      text-decoration: underline;
+    }
+
+    a.hint:focus-visible {
+      outline: 2px solid #007dff;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    .footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header.switch {
+      animation: change 0.35s ease;
+    }
+
+    .card.complete .bell {
+      fill: #2dc557;
+    }
+
+    @keyframes ring {
+
+      0%,
+      100% {
+        transform: rotate(0);
+      }
+
+      15% {
+        transform: rotate(-13deg);
+      }
+
+      35% {
+        transform: rotate(12deg);
+      }
+
+      55% {
+        transform: rotate(-8deg);
+      }
+
+      75% {
+        transform: rotate(5deg);
+      }
+    }
+
+    @keyframes waves {
+      0% {
+        opacity: 0;
+        transform: scaleX(0.85);
+        transform-origin: 150px 200px;
+      }
+
+      20%,
+      65% {
+        opacity: 0.75;
+      }
+
+      100% {
+        opacity: 0;
+        transform: scaleX(1.15);
+        transform-origin: 150px 200px;
+      }
+    }
+
+    @keyframes change {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      45% {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+
+      55% {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .password-page {
+      position: absolute;
+      top: 28px;
+      left: 30px;
+      right: 30px;
+    }
+
+    .password-page h2 {
+      font-size: 22px;
+      line-height: 27px;
+      letter-spacing: -0.65px;
+      margin: 0 0 22px;
+      outline: none;
+    }
+
+    .password-value {
+      margin: 0;
+      border: 2px dashed #e4b73e;
+      border-radius: 13px;
+      background: #fff9e7;
+      padding: 20px 18px;
+      font:
+        18px/1.6 ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      max-height: 400px;
+      overflow-y: auto;
+      user-select: all;
+    }
+
+    .card.password-view .header,
+    .card.password-view .machine,
+    .card.password-view .lever {
+      display: none;
+    }
+
+    .card.password-view .password-page {
+      animation: reveal 0.3s ease-out;
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="frame">
+      <section class="card" aria-label="Password strength tester">
+        <form class="header" autocomplete="off">
+          <h1>Create password</h1>
+          <p class="subtitle">Use 8 or more characters</p>
+          <div class="input-wrap">
+            <input id="password" aria-label="Password" type="text" spellcheck="false" autocomplete="off"
+              autocapitalize="off" /><button class="eye" type="button" aria-label="Hide password" title="显示 / 隐藏密码">
+              <svg viewBox="0 0 24 20" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M2 10s4-5 10-5 10 5 10 5-4 5-10 5S2 10 2 10Z" />
+                <circle cx="12" cy="10" r="2.6" fill="currentColor" stroke="none" />
+              </svg>
+            </button>
+          </div>
+          <div class="feedback" role="status" aria-live="polite" aria-hidden="true">
+            <span class="status-icon">✓</span><span><b>Strong</b><span class="message"> · you’re good to
+                go</span></span>
+          </div>
+        </form>
+        <svg class="machine" viewBox="0 0 380 522" aria-hidden="true">
+          <path d="M30 496H350" stroke="#e6e7e5" />
+          <g class="bell">
+            <circle cx="150" cy="178" r="5" />
+            <path d="M126 211c0-17 8-28 24-28s24 11 24 28Z" />
+            <rect x="121" y="210" width="58" height="7" rx="3.5" />
+          </g>
+          <g class="waves">
+            <path d="M110 182q-8 19 0 38M101 178q-10 23 0 46M190 182q8 19 0 38M199 178q10 23 0 46" />
+          </g>
+          <g>
+            <rect class="segment" x="140" y="230" width="20" height="55" rx="6" />
+            <rect class="segment" x="140" y="291" width="20" height="55" rx="6" />
+            <rect class="segment" x="140" y="352" width="20" height="55" rx="6" />
+            <rect class="segment" x="140" y="413" width="20" height="55" rx="6" />
+          </g>
+          <g>
+            <text class="tick" x="124" y="262">Strong</text>
+            <text class="tick" x="124" y="323">Good</text>
+            <text class="tick" x="124" y="384">Fair</text>
+            <text class="tick" x="124" y="445">Weak</text>
+          </g>
+          <g class="seesaw">
+            <path d="M150 480H255" stroke="#999c9f" stroke-width="8" stroke-linecap="round" />
+            <path d="M232 475H256" stroke="#cdd0d1" stroke-width="4" stroke-linecap="round" />
+            <rect x="127" y="472" width="47" height="19" rx="5" fill="#ced0d1" />
+          </g>
+          <g class="puck">
+            <rect class="trail t3" x="129" y="438" width="42" height="17" rx="8.5" fill="#222" opacity=".05" />
+            <rect class="trail t2" x="129" y="445" width="42" height="17" rx="8.5" fill="#222" opacity=".1" />
+            <rect class="trail t1" x="129" y="452" width="42" height="17" rx="8.5" fill="#222" opacity=".2" />
+            <rect x="129" y="460" width="42" height="17" rx="8.5" fill="#1d1e1e" />
+          </g>
+        </svg>
+        <div class="lever">
+          <div class="shaft"></div>
+          <span class="pivot"></span><button class="continue" type="button">Check</button>
+        </div>
+        <section class="password-page" hidden aria-labelledby="password-title">
+          <h2 id="password-title" tabindex="-1">Password</h2>
+          <p class="password-value"></p>
+        </section>
+      </section>
+    </div>
+    <div class="footer">
+      <a class="hint" href="https://github.com/MeTerminator/simple-frontend" target="_blank"
+        rel="noopener noreferrer">MeTerminator/simple-frontend</a>
+    </div>
+  </main>
+  <script>
+    const $ = (s) => document.querySelector(s),
+      card = $(".card"),
+      input = $("#password"),
+      lever = $(".lever"),
+      button = $(".continue"),
+      puck = $(".puck"),
+      bell = $(".bell"),
+      feedback = $(".feedback");
+    let busy = false,
+      phase = "create",
+      saved = "",
+      accepted = false,
+      effectTimers = [],
+      animations = [],
+      playing = new Set();
+    const samples = Object.fromEntries(
+      ["weak", "strong", "key"].map((n) => [n, new Audio(`assets/${n}.mp3`)]),
+    );
+    function play(name) {
+      const a = samples[name].cloneNode();
+      a.volume = name === "key" ? 0.35 : 0.75;
+      playing.add(a);
+      a.onended = () => playing.delete(a);
+      a.play().catch(() => playing.delete(a));
+    }
+    function later(fn, ms) {
+      const t = setTimeout(fn, ms);
+      effectTimers.push(t);
+      return t;
+    }
+    function animate(el, frames, options) {
+      const a = el.animate(frames, options);
+      animations.push(a);
+      return a;
+    }
+    function clearEffects() {
+      effectTimers.forEach(clearTimeout);
+      effectTimers = [];
+      animations.forEach((a) => a.cancel());
+      animations = [];
+      playing.forEach((a) => a.pause());
+      playing.clear();
+      busy = false;
+      button.disabled = false;
+      puck.style.transform = "";
+      $(".header").classList.remove("switch");
+      bell.classList.remove("ringing");
+    }
+    function clearResult() {
+      card.classList.remove("result", "complete");
+      feedback.classList.remove("show");
+      feedback.setAttribute("aria-hidden", "true");
+      document
+        .querySelectorAll(".lit")
+        .forEach((el) => el.classList.remove("lit"));
+      bell.classList.remove("green", "ringing");
+      accepted = false;
+      button.textContent = "Check";
+    }
+    function strength(value) {
+      if (
+        value.length < 8 ||
+        /^(password\d*|123456\d*|qwerty\w*|abcdefgh\w*|letmein\d*|admin\d*)$/i.test(
+          value,
+        ) ||
+        new Set(value).size < 4
+      )
+        return 0;
+      const words = value.trim().split(/\s+/).length;
+      const kinds = [/[a-z]/, /[A-Z]/, /\d/, /[^\w\s]/].filter((r) =>
+        r.test(value),
+      ).length;
+      if (
+        value.length >= 20 ||
+        (words >= 4 && value.length >= 18) ||
+        (value.length >= 12 && kinds >= 3)
+      )
+        return 3;
+      if (value.length >= 12 || kinds >= 3) return 2;
+      return 1;
+    }
+    function result(level) {
+      const colors = ["#f04b43", "#efa333", "#85ba43", "#2dc557"],
+        labels = ["Weak", "Fair", "Good", "Strong"];
+      card.style.setProperty("--result", colors[level]);
+      card.classList.add("result");
+      feedback.classList.add("show");
+      feedback.setAttribute("aria-hidden", "false");
+      feedback.querySelector("b").textContent = labels[level];
+      feedback.querySelector(".message").textContent = [
+        " · too easy to guess",
+        " · try a longer password",
+        " · you can continue",
+        " · you’re good to go",
+      ][level];
+      $(".status-icon").textContent = level >= 2 ? "✓" : "•";
+      document
+        .querySelectorAll(".segment")
+        .forEach((e, i) => e.classList.toggle("lit", i >= 3 - level));
+      document
+        .querySelectorAll(".tick")
+        .forEach((e, i) => e.classList.toggle("lit", i >= 3 - level));
+      accepted = level >= 2;
+      button.textContent = accepted ? "Continue" : "Check";
+    }
+    function strike() {
+      if (busy || phase !== "create") return;
+      if (phase === "create" && accepted) {
+        nextPhase();
+        return;
+      }
+      busy = true;
+      button.disabled = true;
+      clearResult();
+      const level = strength(input.value);
+      play(level === 3 ? "strong" : "weak");
+      animate(
+        lever,
+        [
+          { transform: "rotate(0deg)", offset: 0 },
+          { transform: "rotate(32deg)", offset: 0.2 },
+          { transform: "rotate(-43deg)", offset: 0.43 },
+          { transform: "rotate(-38deg)", offset: 0.67 },
+          { transform: "rotate(0deg)", offset: 1 },
+        ],
+        { duration: 1000, easing: "cubic-bezier(.4,0,.2,1)" },
+      );
+      later(() => {
+        result(level);
+        const rise = [-26, -85, -148, -234][level];
+        animate(
+          $(".seesaw"),
+          [
+            { transform: "rotate(0deg)", transformOrigin: "255px 480px" },
+            { transform: "rotate(6deg)", transformOrigin: "255px 480px" },
+            { transform: "rotate(0deg)", transformOrigin: "255px 480px" },
+          ],
+          { duration: 240 },
+        );
+        animate(
+          puck,
+          [
+            { transform: "translateY(0)", offset: 0 },
+            { transform: `translateY(${rise}px)`, offset: 0.35 },
+            { transform: `translateY(${rise - 2}px)`, offset: 0.4 },
+            { transform: "translateY(0)", offset: 0.87 },
+            { transform: "translateY(-6px)", offset: 0.94 },
+            { transform: "translateY(0)", offset: 1 },
+          ],
+          {
+            duration: level === 3 ? 1050 : 600,
+            easing: "cubic-bezier(.2,.6,.4,1)",
+          },
+        );
+        document
+          .querySelectorAll(".trail")
+          .forEach((e) =>
+            animate(
+              e,
+              [
+                { opacity: 0 },
+                { opacity: Number(e.getAttribute("opacity")), offset: 0.3 },
+                { opacity: 0 },
+              ],
+              { duration: level === 3 ? 1000 : 500 },
+            ),
+          );
+        if (level === 3)
+          later(() => {
+            bell.classList.add("ringing", "green");
+          }, 340);
+      }, 410);
+      later(() => {
+        busy = false;
+        button.disabled = false;
+      }, 1600);
+    }
+    function nextPhase() {
+      if (
+        busy ||
+        phase !== "create" ||
+        !accepted ||
+        strength(input.value) < 2
+      )
+        return;
+      saved = input.value;
+      phase = "password";
+      $(".password-value").textContent = saved;
+      $(".password-page").hidden = false;
+      card.classList.add("password-view");
+      $(".footer").hidden = true;
+      $("#password-title").focus({ preventScroll: true });
+    }
+    button.addEventListener("click", () => {
+      strike();
+    });
+    $(".header").addEventListener("submit", (e) => {
+      e.preventDefault();
+      strike();
+    });
+    input.addEventListener("input", () => {
+      if (busy) clearEffects();
+      clearResult();
+      play("key");
+    });
+    $(".eye").onclick = () => {
+      const hide = input.type === "text";
+      input.type = hide ? "password" : "text";
+      $(".eye").setAttribute(
+        "aria-label",
+        hide ? "Show password" : "Hide password",
+      );
+      input.focus({ preventScroll: true });
+    };
+    function fit() {
+      const s = Math.min(
+        1,
+        (innerWidth - 40) / 380,
+        (innerHeight - 145) / 522,
+      );
+      const scale = Math.max(0.4, s);
+      $(".frame").style.width = 380 * scale + "px";
+      $(".frame").style.height = 522 * scale + "px";
+      card.style.transform = `scale(${scale})`;
+    }
+    addEventListener("resize", fit);
+    fit();
+  </script>
+</body>
+
+</html>
