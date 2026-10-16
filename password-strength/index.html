@@ -85,18 +85,18 @@
 
     .input-wrap {
       height: 46px;
-      border: 1.5px solid #71a9db;
+      border: 1.5px solid #d5d7d8;
       border-radius: 13px;
-      box-shadow: 0 0 0 4px #0080ff10;
+      box-shadow: 0 0 0 5px transparent;
       position: relative;
       transition:
-        border-color 0.18s,
-        box-shadow 0.18s;
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
     }
 
     .input-wrap:focus-within {
-      border-color: #428ed0;
-      box-shadow: 0 0 0 4px #0080ff12;
+      border-color: #0084ff;
+      box-shadow: 0 0 0 5px rgb(0 132 255 / 16%);
     }
 
     input {
@@ -107,6 +107,7 @@
       outline: 0;
       padding: 0 43px 0 16px;
       color: #222;
+      caret-color: #0084ff;
       font-size: 18px;
       border-radius: 12px;
     }
@@ -172,7 +173,7 @@
 
     .card.result .input-wrap {
       border-color: var(--result);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--result) 14%, transparent);
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--result) 14%, transparent);
     }
 
     .machine {
@@ -225,7 +226,7 @@
       opacity: 0;
     }
 
-    .ringing~.waves {
+    .ringing ~ .waves {
       animation: waves 0.7s ease-out;
     }
 
@@ -339,7 +340,6 @@
     }
 
     @keyframes ring {
-
       0%,
       100% {
         transform: rotate(0);
@@ -472,17 +472,47 @@
           <h1>Create password</h1>
           <p class="subtitle">Use 8 or more characters</p>
           <div class="input-wrap">
-            <input id="password" aria-label="Password" type="text" spellcheck="false" autocomplete="off"
-              autocapitalize="off" /><button class="eye" type="button" aria-label="Hide password" title="显示 / 隐藏密码">
-              <svg viewBox="0 0 24 20" fill="none" stroke="currentColor" stroke-width="1.7">
+            <input
+              id="password"
+              aria-label="Password"
+              type="text"
+              spellcheck="false"
+              autocomplete="off"
+              autocapitalize="off"
+            /><button
+              class="eye"
+              type="button"
+              aria-label="Hide password"
+              title="显示 / 隐藏密码"
+            >
+              <svg
+                viewBox="0 0 24 20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+              >
                 <path d="M2 10s4-5 10-5 10 5 10 5-4 5-10 5S2 10 2 10Z" />
-                <circle cx="12" cy="10" r="2.6" fill="currentColor" stroke="none" />
+                <circle
+                  cx="12"
+                  cy="10"
+                  r="2.6"
+                  fill="currentColor"
+                  stroke="none"
+                />
               </svg>
             </button>
           </div>
-          <div class="feedback" role="status" aria-live="polite" aria-hidden="true">
-            <span class="status-icon">✓</span><span><b>Strong</b><span class="message"> · you’re good to
-                go</span></span>
+          <div
+            class="feedback"
+            role="status"
+            aria-live="polite"
+            aria-hidden="true"
+          >
+            <span class="status-icon">✓</span
+            ><span
+              ><b>Strong</b
+              ><span class="message"> · you’re good to go</span></span
+            >
           </div>
         </form>
         <svg class="machine" viewBox="0 0 380 522" aria-hidden="true">
@@ -493,13 +523,43 @@
             <rect x="121" y="210" width="58" height="7" rx="3.5" />
           </g>
           <g class="waves">
-            <path d="M110 182q-8 19 0 38M101 178q-10 23 0 46M190 182q8 19 0 38M199 178q10 23 0 46" />
+            <path
+              d="M110 182q-8 19 0 38M101 178q-10 23 0 46M190 182q8 19 0 38M199 178q10 23 0 46"
+            />
           </g>
           <g>
-            <rect class="segment" x="140" y="230" width="20" height="55" rx="6" />
-            <rect class="segment" x="140" y="291" width="20" height="55" rx="6" />
-            <rect class="segment" x="140" y="352" width="20" height="55" rx="6" />
-            <rect class="segment" x="140" y="413" width="20" height="55" rx="6" />
+            <rect
+              class="segment"
+              x="140"
+              y="230"
+              width="20"
+              height="55"
+              rx="6"
+            />
+            <rect
+              class="segment"
+              x="140"
+              y="291"
+              width="20"
+              height="55"
+              rx="6"
+            />
+            <rect
+              class="segment"
+              x="140"
+              y="352"
+              width="20"
+              height="55"
+              rx="6"
+            />
+            <rect
+              class="segment"
+              x="140"
+              y="413"
+              width="20"
+              height="55"
+              rx="6"
+            />
           </g>
           <g>
             <text class="tick" x="124" y="262">Strong</text>
@@ -508,30 +568,91 @@
             <text class="tick" x="124" y="445">Weak</text>
           </g>
           <g class="seesaw">
-            <path d="M150 480H255" stroke="#999c9f" stroke-width="8" stroke-linecap="round" />
-            <path d="M232 475H256" stroke="#cdd0d1" stroke-width="4" stroke-linecap="round" />
-            <rect x="127" y="472" width="47" height="19" rx="5" fill="#ced0d1" />
+            <path
+              d="M150 480H255"
+              stroke="#999c9f"
+              stroke-width="8"
+              stroke-linecap="round"
+            />
+            <path
+              d="M232 475H256"
+              stroke="#cdd0d1"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <rect
+              x="127"
+              y="472"
+              width="47"
+              height="19"
+              rx="5"
+              fill="#ced0d1"
+            />
           </g>
           <g class="puck">
-            <rect class="trail t3" x="129" y="438" width="42" height="17" rx="8.5" fill="#222" opacity=".05" />
-            <rect class="trail t2" x="129" y="445" width="42" height="17" rx="8.5" fill="#222" opacity=".1" />
-            <rect class="trail t1" x="129" y="452" width="42" height="17" rx="8.5" fill="#222" opacity=".2" />
-            <rect x="129" y="460" width="42" height="17" rx="8.5" fill="#1d1e1e" />
+            <rect
+              class="trail t3"
+              x="129"
+              y="438"
+              width="42"
+              height="17"
+              rx="8.5"
+              fill="#222"
+              opacity=".05"
+            />
+            <rect
+              class="trail t2"
+              x="129"
+              y="445"
+              width="42"
+              height="17"
+              rx="8.5"
+              fill="#222"
+              opacity=".1"
+            />
+            <rect
+              class="trail t1"
+              x="129"
+              y="452"
+              width="42"
+              height="17"
+              rx="8.5"
+              fill="#222"
+              opacity=".2"
+            />
+            <rect
+              x="129"
+              y="460"
+              width="42"
+              height="17"
+              rx="8.5"
+              fill="#1d1e1e"
+            />
           </g>
         </svg>
         <div class="lever">
           <div class="shaft"></div>
-          <span class="pivot"></span><button class="continue" type="button">Check</button>
+          <span class="pivot"></span
+          ><button class="continue" type="button">Check</button>
         </div>
-        <section class="password-page" hidden aria-labelledby="password-title">
+        <section
+          class="password-page"
+          hidden
+          aria-labelledby="password-title"
+        >
           <h2 id="password-title" tabindex="-1">Password</h2>
           <p class="password-value"></p>
         </section>
       </section>
     </div>
     <div class="footer">
-      <a class="hint" href="https://github.com/MeTerminator/simple-frontend" target="_blank"
-        rel="noopener noreferrer">MeTerminator/simple-frontend</a>
+      <a
+        class="hint"
+        href="https://github.com/MeTerminator/simple-frontend"
+        target="_blank"
+        rel="noopener noreferrer"
+        >MeTerminator/simple-frontend</a
+      >
     </div>
   </main>
   <script>
@@ -551,11 +672,15 @@
       animations = [],
       playing = new Set();
     const samples = Object.fromEntries(
-      ["weak", "strong", "key"].map((n) => [n, new Audio(`assets/${n}.mp3`)]),
+      ["weak", "strong", "key"].map((name) => {
+        const audio = new Audio(`assets/${name}.mp3`);
+        audio.preload = "auto";
+        return [name, audio];
+      }),
     );
     function play(name) {
       const a = samples[name].cloneNode();
-      a.volume = name === "key" ? 0.35 : 0.75;
+      a.volume = 0.75;
       playing.add(a);
       a.onended = () => playing.delete(a);
       a.play().catch(() => playing.delete(a));
@@ -631,6 +756,23 @@
         " · you’re good to go",
       ][level];
       $(".status-icon").textContent = level >= 2 ? "✓" : "•";
+      if (level === 0) {
+        animate(
+          $(".input-wrap"),
+          [
+            { transform: "translateX(0)", offset: 0 },
+            { transform: "translateX(-3.6px)", offset: 0.04 },
+            { transform: "translateX(2.7px)", offset: 0.14 },
+            { transform: "translateX(-1.8px)", offset: 0.28 },
+            { transform: "translateX(1px)", offset: 0.38 },
+            { transform: "translateX(-0.9px)", offset: 0.5 },
+            { transform: "translateX(0.5px)", offset: 0.62 },
+            { transform: "translateX(-0.4px)", offset: 0.76 },
+            { transform: "translateX(0)", offset: 1 },
+          ],
+          { duration: 500, easing: "ease-in-out" },
+        );
+      }
       document
         .querySelectorAll(".segment")
         .forEach((e, i) => e.classList.toggle("lit", i >= 3 - level));
@@ -728,6 +870,11 @@
       $(".footer").hidden = true;
       $("#password-title").focus({ preventScroll: true });
     }
+    button.addEventListener("pointerdown", (event) => {
+      // Keep the blue caret and focus ring while operating the machine.
+      event.preventDefault();
+      input.focus({ preventScroll: true });
+    });
     button.addEventListener("click", () => {
       strike();
     });

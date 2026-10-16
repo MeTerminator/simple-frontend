@@ -24,6 +24,8 @@ python3 -m http.server 8765 --directory password-strength
 4. 动画结束后点击 Continue，进入标题为 **Password** 的页面，在黄色虚线框中展示刚设置的密码。
 5. 检测通过后若编辑密码，按钮恢复 Check，需要重新检测。
 
+输入框聚焦时显示亮蓝色边框与淡蓝光圈。检测结果同步更新刻度、输入框边框和提示；Weak 反馈同时触发约 500 毫秒的左右衰减抖动；编辑密码会取消旧动画。
+
 眼睛按钮切换明文/隐藏；音效默认开启，没有关闭开关。浏览器通常需要首次输入或点击后才允许播放。没有播放演示或重置按钮；刷新页面重新开始。
 
 底部 `MeTerminator/simple-frontend` 指向 [GitHub 仓库](https://github.com/MeTerminator/simple-frontend)，通过 `target="_blank"` 和 `rel="noopener noreferrer"` 在新标签页或窗口打开。
